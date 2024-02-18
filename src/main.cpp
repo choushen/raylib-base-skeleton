@@ -10,7 +10,9 @@ int main()
     InitWindow(screenWidth, screenHeight, "My first RAYLIB program!");
     SetTargetFPS(60);
 
-    while (!WindowShouldClose())
+    
+
+    while (WindowShouldClose() == false)
     {
         BeginDrawing();
         ClearBackground(darkGreen);
