@@ -49,8 +49,20 @@ int main()
         ClearBackground(rayWhite);
 
         if (collisionWithRect) {
-            DrawText("GAME OVER", 400, 200, 20, red);
-        } else {     
+            DrawText("GAME OVER", (screenWidth/2), (screenHeight/2), 20, red);
+        } else { 
+
+            // Update the edges of the circle and rectangle
+            rectLeftEdge = rectX;
+            rectRightEdge = rectX + rectWidth;
+            rectTopEdge = rectY;
+            rectBottomEdge = rectY + rectHeight;
+
+            circleLeftEdge = circleX - circleRadius;
+            circleRightEdge = circleX + circleRadius;
+            circleTopEdge = circleY - circleRadius;
+            circleBottomEdge = circleY + circleRadius;
+
             // Draw the circle and rectangle
             DrawCircle(circleX, circleY, circleRadius, darkGreen);
             DrawRectangle(rectX, rectY, rectWidth, rectHeight, red);
@@ -60,11 +72,19 @@ int main()
 
             // Making the rectangle go up and down
             rectY += direction;
+            
+            // Colision detection
+            
+            collisionWithRect = 
+                        (rectBottomEdge >= circleTopEdge) &&
+                        (rectTopEdge <= circleBottomEdge) &&
+                        (rectRightEdge >= circleLeftEdge) && 
+                        (rectLeftEdge <= circleRightEdge);
+            
 
             if(rectY > screenHeight || rectY < 0) {
                 direction = -direction;
             }
-
 
             if (IsKeyDown(KEY_RIGHT) && circleX < screenWidth - 5) {
                 circleX+=circleSpeed;
