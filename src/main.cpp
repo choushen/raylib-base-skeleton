@@ -6,24 +6,28 @@ int main()
     Color red = Color{255, 0, 0, 255};
     Color rayWhite = Color{245, 245, 245, 255};
 
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth{800};
+    const int screenHeight{450};
 
-    int direction = 10;
+    int direction{10};
+    int circleSpeed{5};
+
+    bool collisionWithRect{false};
 
     InitWindow(screenWidth, screenHeight, "My first RAYLIB program!");
     SetTargetFPS(60);
 
     // Circle variables
-    int circleX = screenWidth / 4;
-    int circleY = screenHeight / 4;
-    int radius = 50;
+    int circleX{screenWidth / 4};
+    int circleY{screenHeight / 4};
+    int circleRadius{25};
     
     // Circle edges
-    int circleRight = circleX + radius;
-    int circleLeft = circleX - radius;
-    int circleUp = circleY - radius;
-    int circleDown = circleY + radius;
+    int circleRightEdge{circleX + circleRadius};
+    int circleLeftEdge{circleX - circleRadius};
+    int circleTopEdge{circleY - circleRadius};
+    int circleBottomEdge{circleY + circleRadius};
+
 
     // Rectangle variables
     int rectX {400};
@@ -31,50 +35,53 @@ int main()
     int rectWidth{50}, rectHeight{50};
 
     // Rectangle edges
-
-
-
+    int rectRightEdge{rectX + rectWidth};
+    int rectLeftEdge{rectX};
+    int rectTopEdge{rectY};
+    int rectBottomEdge{rectY + rectHeight};
 
 
     // While this function returns false, the window should stay open
     while (!WindowShouldClose())
     {
+
         BeginDrawing();
         ClearBackground(rayWhite);
 
-        // Add code to make sure the circle doesn't go off screen
+        if (collisionWithRect) {
+            DrawText("GAME OVER", 400, 200, 20, red);
+        } else {     
+            // Draw the circle and rectangle
+            DrawCircle(circleX, circleY, circleRadius, darkGreen);
+            DrawRectangle(rectX, rectY, rectWidth, rectHeight, red);
+            
+            // Draw the text
+            DrawText("Move the circle with the arrow keys", 10, 10, 20, darkGreen);
+
+            // Making the rectangle go up and down
+            rectY += direction;
+
+            if(rectY > screenHeight || rectY < 0) {
+                direction = -direction;
+            }
 
 
-        // Draw the circle and rectangle
-        DrawCircle(circleX, circleY, radius, darkGreen);
-        DrawRectangle(rectX, rectY, rectWidth, rectHeight, red);
-        
-        // Making the rectangle go up and down
-        rectY += direction;
+            if (IsKeyDown(KEY_RIGHT) && circleX < screenWidth - 5) {
+                circleX+=circleSpeed;
+            }
 
-        if(rectY > 450 || rectY < 0) {
-            direction = -direction;
+            if (IsKeyDown(KEY_LEFT) && circleX > 5) {
+                circleX-=circleSpeed;
+            }
+
+            if (IsKeyDown(KEY_DOWN) && circleY < screenHeight - 5) {
+                circleY+=circleSpeed;
+            }
+
+            if (IsKeyDown(KEY_UP) && circleY > 5) {
+                circleY-= circleSpeed;
+            }
         }
-
-
-        if (IsKeyDown(KEY_RIGHT) && circleX < 750) {
-            circleX+=2;
-        }
-
-        if (IsKeyDown(KEY_LEFT) && circleX > 50) {
-            circleX-=2;
-        }
-
-        if (IsKeyDown(KEY_DOWN) && circleY < 550) {
-            circleY+=2;
-        }
-
-        if (IsKeyDown(KEY_UP) && circleY > 50) {
-            circleY-=2;
-        }
-
-
-
 
         EndDrawing();
     }
